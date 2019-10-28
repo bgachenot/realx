@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const https = require('https');
+const request = require('request');
 const colors = require('colors/safe')
 const program = require('commander')
 const chokidar = require('chokidar')
@@ -23,6 +25,8 @@ program
   .option('-t, --temp [location]', 'Directory for temp file')
   .option('--bo, --build-once', 'Build once only, do not watch')
   .option('-l, --locals <json>', 'Json locals for pug rendering')
+  .option('-u, --url <url>', 'url of json file for pug rendering')
+  .option('-i, --input <path>', 'path of json file for pug rendering')
   .option('--basedir <location>', 'Base directory for absolute paths, e.g. /')
 
   .action(function (inp, out) {
@@ -89,8 +93,78 @@ if (program.locals) {
     colors.red('ReLaXed error: Could not parse locals JSON, see above.')
   }
 }
+if (program.input) {
+  try {
+    let rawData = fs.readFileSync(program.input);
+    locals = JSON.parse(rawData);
+    console.log(colors.magenta(`\nRealx : running releaxed in augmented mode with input from ${program.input}\n`))
+  } catch (e) {
+    console.error(e)
+    colors.red('ReLaXed error: Could not parse file or path, see above.')
+  }
+}
+// HTTP CODE 
+function downloadPage(url) {
+  return new Promise((resolve, reject) => {
+      request(url, (error, response, body) => {
+          if (error) reject(error);
+          if (response.statusCode != 200) {
+              reject('Invalid status code <' + response.statusCode + '>');
+          }
+          resolve(body);
+      });
+  });
+}
 
+// now to program the "usual" way
+// all you need to do is use async functions and await
+// for functions returning promises
+const myBackEndLogic = async (url) => {
+  try {
+      const rawPayload = await downloadPage(url)
+      const apiResponse = JSON.parse(rawPayload);
+      console.log(colors.magenta('Realx : fetching content from', url));
 
+      // try downloading an invalid url
+      locals = apiResponse[0];
+  } catch (error) {
+      console.error('ERROR:');
+      console.error(error);
+  }
+}
+if (program.url) {
+  // ASYNC MODE
+  // try {
+  //   console.log(colors.magenta(`\nRealx : running releaxed in augmented mode with url from ${program.url}\n`))
+  //   const url = program.url;
+  //   console.log(colors.magenta(`url is ${url}`));
+  //   const getApiRessources = async (url) => {
+  //     await https.get(url, (res) => {
+  //       res.setEncoding('utf8');
+  //       var body = '';
+  //       res.on('data', function(chunk){
+  //         body += chunk;
+  //       });
+  //       res.on('end', function(){
+  //         const apiResponse = JSON.parse(body);
+  //         locals = apiResponse;
+  //         console.log(colors.magenta('we got your data'));
+  //       });
+  //     }).on('error', function(e){
+  //       console.log("Got an error: ", e);
+  //     });
+  //   }
+  //   getApiRessources(url);
+  // } catch (e) {
+
+  // }
+
+  // wrap a request in an promise
+  // myBackEndLogic(program.url);
+
+// run your async function
+
+}
 
 // Google Chrome headless configuration
 const puppeteerConfig = {
@@ -199,6 +273,10 @@ async function build (filepath) {
   }
 
   if (!taskPromise) {
+    if (program.url) {
+      await myBackEndLogic(program.url);
+    }
+    console.log(colors.magenta('Realx : starting build'))
     taskPromise = masterToPDF(inputPath, relaxedGlobals, tempHTMLPath, outputPath, locals)
   }
   await taskPromise

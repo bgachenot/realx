@@ -1,10 +1,10 @@
 {
-  "name": "relaxedjs",
+  "name": "fsrelaxedjs",
   "version": "0.2.2",
   "description": "Create PDF documents using web technologies (PDF/SCSS)",
   "main": "src/index.js",
   "bin": {
-    "relaxed": "src/index.js",
+    "realx": "src/index.js",
     "pretty-pdf-thumbnail": "src/cli-tools/pretty-pdf-thumbnail.js",
     "pdf2gif": "src/cli-tools/pdf2gif.js"
   },
