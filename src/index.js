@@ -103,7 +103,8 @@ if (program.input) {
     colors.red('ReLaXed error: Could not parse file or path, see above.')
   }
 }
-// HTTP CODE 
+
+// HTTP CODE for -u --url
 function downloadPage(url) {
   return new Promise((resolve, reject) => {
       request(url, (error, response, body) => {
@@ -116,10 +117,7 @@ function downloadPage(url) {
   });
 }
 
-// now to program the "usual" way
-// all you need to do is use async functions and await
-// for functions returning promises
-const myBackEndLogic = async (url) => {
+const getRemoteJson = async (url) => {
   try {
       const rawPayload = await downloadPage(url)
       const apiResponse = JSON.parse(rawPayload);
@@ -131,39 +129,6 @@ const myBackEndLogic = async (url) => {
       console.error('ERROR:');
       console.error(error);
   }
-}
-if (program.url) {
-  // ASYNC MODE
-  // try {
-  //   console.log(colors.magenta(`\nRealx : running releaxed in augmented mode with url from ${program.url}\n`))
-  //   const url = program.url;
-  //   console.log(colors.magenta(`url is ${url}`));
-  //   const getApiRessources = async (url) => {
-  //     await https.get(url, (res) => {
-  //       res.setEncoding('utf8');
-  //       var body = '';
-  //       res.on('data', function(chunk){
-  //         body += chunk;
-  //       });
-  //       res.on('end', function(){
-  //         const apiResponse = JSON.parse(body);
-  //         locals = apiResponse;
-  //         console.log(colors.magenta('we got your data'));
-  //       });
-  //     }).on('error', function(e){
-  //       console.log("Got an error: ", e);
-  //     });
-  //   }
-  //   getApiRessources(url);
-  // } catch (e) {
-
-  // }
-
-  // wrap a request in an promise
-  // myBackEndLogic(program.url);
-
-// run your async function
-
 }
 
 // Google Chrome headless configuration
@@ -274,7 +239,7 @@ async function build (filepath) {
 
   if (!taskPromise) {
     if (program.url) {
-      await myBackEndLogic(program.url);
+      await getRemoteJson(program.url);
     }
     console.log(colors.magenta('Realx : starting build'))
     taskPromise = masterToPDF(inputPath, relaxedGlobals, tempHTMLPath, outputPath, locals)

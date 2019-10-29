@@ -1,4 +1,4 @@
-# ReLaXed
+# Realx
 
 This is a fork from [RelaxedJS](https://github.com/RelaxedJS/ReLaXed/wiki/Command-line-options) to add more features to CLI such as : 
 * get locals from URL endpoint

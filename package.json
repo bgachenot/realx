@@ -1,6 +1,6 @@
 {
-  "name": "fsrelaxedjs",
-  "version": "0.2.2",
+  "name": "realx",
+  "version": "0.0.2",
   "description": "Create PDF documents using web technologies (PDF/SCSS)",
   "main": "src/index.js",
   "bin": {
@@ -11,8 +11,8 @@
   "scripts": {
     "test": "mocha"
   },
-  "author": "Zulko",
-  "homepage": "https://github.com/RelaxedJS",
+  "author": "thibaut@16pixels.fr",
+  "homepage": "https://github.com/16pixels/realx",
   "license": "ISC",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
