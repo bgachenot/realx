@@ -1,6 +1,6 @@
 {
   "name": "realx",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Create PDF documents using web technologies (PDF/SCSS)",
   "main": "src/index.js",
   "bin": {

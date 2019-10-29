@@ -14,7 +14,7 @@ The api is the same from forked software, we add two specific methods :
 
 ```
 -i, --input <path>       path of json file for pug rendering
--u, --url <url>          url of json file for pug rendering
+-u, --url <url>          url of json endpoint for pug rendering
 ```
 
 You api response must be formatted as followed : 
