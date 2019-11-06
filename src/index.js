@@ -93,7 +93,7 @@ if (program.watch) {
   watchLocations = watchLocations.concat(program.watch)
 }
 
-let locals
+let locals = {};
 if (program.locals) {
   try {
     const stdLocals = JSON.parse(program.locals);
