@@ -49,7 +49,7 @@ const inputFilenameNoExt = path.basename(input, path.extname(input))
 const mergeJson = (source, blob = {}) => {
   const newLocals = blob;
   if (typeof newLocals === 'object') {
-    merge(source, newLocals);
+    locals = merge(source, newLocals);
     return true;
   }
   throw new Error('Invalid json input');
@@ -97,7 +97,7 @@ let locals = {};
 if (program.locals) {
   try {
     const stdLocals = JSON.parse(program.locals);
-    mergeJson(locals, stdLocals);
+    locals = mergeJson(locals, stdLocals);
   } catch (e) {
     console.error(e)
     colors.red('ReLaXed error: Could not parse locals JSON, see above.')
@@ -107,7 +107,7 @@ if (program.input) {
   try {
     let rawData = fs.readFileSync(program.input);
     const inputLocals = JSON.parse(rawData);
-    mergeJson(locals, inputLocals);
+    locals = mergeJson(locals, inputLocals);
     console.log(colors.magenta(`\nRealx : running releaxed in augmented mode with input from ${program.input}\n`))
   } catch (e) {
     console.error(e)
@@ -136,7 +136,7 @@ const getRemoteJson = async (url) => {
 
       // try downloading an invalid url
       const apiLocals = apiResponse[0];
-      mergeJson(locals, apiLocals);
+      locals = mergeJson(locals, apiLocals);
   } catch (error) {
       console.error('ERROR:');
       console.error(error);
