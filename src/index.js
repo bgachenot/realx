@@ -12,6 +12,7 @@ const path = require('path')
 const fs = require('fs')
 const plugins = require('./plugins')
 const { masterToPDF } = require('./masterToPDF.js')
+const merge = require('deepmerge');
 
 var input, output
 const version = require('../package.json').version
@@ -45,6 +46,14 @@ if (!input || fs.lstatSync(input).isDirectory()) {
 const inputPath = path.resolve(input)
 const inputDir = path.resolve(inputPath, '..')
 const inputFilenameNoExt = path.basename(input, path.extname(input))
+const mergeJson = (source, blob = {}) => {
+  const newLocals = blob;
+  if (typeof newLocals === 'object') {
+    merge(source, newLocals);
+    return true;
+  }
+  throw new Error('Invalid json input');
+}
 
 var configPath
 for (var filename of ['config.yml', 'config.json']) {
@@ -87,7 +96,8 @@ if (program.watch) {
 let locals
 if (program.locals) {
   try {
-    locals = JSON.parse(program.locals)
+    const stdLocals = JSON.parse(program.locals);
+    mergeJson(locals, stdLocals);
   } catch (e) {
     console.error(e)
     colors.red('ReLaXed error: Could not parse locals JSON, see above.')
@@ -96,7 +106,8 @@ if (program.locals) {
 if (program.input) {
   try {
     let rawData = fs.readFileSync(program.input);
-    locals = JSON.parse(rawData);
+    const inputLocals = JSON.parse(rawData);
+    mergeJson(locals, inputLocals);
     console.log(colors.magenta(`\nRealx : running releaxed in augmented mode with input from ${program.input}\n`))
   } catch (e) {
     console.error(e)
@@ -124,7 +135,8 @@ const getRemoteJson = async (url) => {
       console.log(colors.magenta('Realx : fetching content from', url));
 
       // try downloading an invalid url
-      locals = apiResponse[0];
+      const apiLocals = apiResponse[0];
+      mergeJson(locals, apiLocals);
   } catch (error) {
       console.error('ERROR:');
       console.error(error);

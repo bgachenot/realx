@@ -29,3 +29,7 @@ You api response must be formatted as followed :
   }
 ]
 ```
+
+# Changelog (dd/mm/yyyy)
+
+* 06/11/2019 : added a method to merge variables from ``locals``, ``input`` and ``url`` parameters can now be used simultaneously
