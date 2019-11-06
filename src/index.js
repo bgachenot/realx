@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-const https = require('https');
 const request = require('request');
 const colors = require('colors/safe')
 const program = require('commander')
@@ -50,7 +49,7 @@ const mergeJson = (source, blob = {}) => {
   const newLocals = blob;
   if (typeof newLocals === 'object') {
     locals = merge(source, newLocals);
-    return true;
+    return locals;
   }
   throw new Error('Invalid json input');
 }
