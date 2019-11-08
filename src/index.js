@@ -134,7 +134,7 @@ const getRemoteJson = async (url) => {
       console.log(colors.magenta('Realx : fetching content from', url));
 
       // try downloading an invalid url
-      const apiLocals = apiResponse[0];
+      const apiLocals = apiResponse;
       locals = mergeJson(locals, apiLocals);
   } catch (error) {
       console.error('ERROR:');

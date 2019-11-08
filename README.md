@@ -20,14 +20,12 @@ The api is the same from forked software, we add two specific methods :
 You api response must be formatted as followed : 
 
 ```
-[ # an array to wrap the paylaod
-  { # an object containing any variables you want to inject in your pdf
-    "1": "",
-    "2": 123,
-    "3": true,
-    "n": false
-  }
-]
+{ # an object containing any variables you want to inject in your pdf
+  "1": "",
+  "2": 123,
+  "3": true,
+  "n": false
+}
 ```
 
 # Changelog (dd/mm/yyyy)
