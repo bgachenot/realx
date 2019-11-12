@@ -27,6 +27,7 @@ program
   .option('-l, --locals <json>', 'Json locals for pug rendering')
   .option('-u, --url <url>', 'url of json file for pug rendering')
   .option('-i, --input <path>', 'path of json file for pug rendering')
+  .option('-d, --debug', 'launch debug mode, will print your input')
   .option('--basedir <location>', 'Base directory for absolute paths, e.g. /')
 
   .action(function (inp, out) {
@@ -45,9 +46,21 @@ if (!input || fs.lstatSync(input).isDirectory()) {
 const inputPath = path.resolve(input)
 const inputDir = path.resolve(inputPath, '..')
 const inputFilenameNoExt = path.basename(input, path.extname(input))
+
+let debugMode = false;
+if (program.debug) {
+  console.log(colors.magenta(`Realx : Debug Mode active`))
+  debugMode = true;
+}
+
 const mergeJson = (source, blob = {}) => {
   const newLocals = blob;
   if (typeof newLocals === 'object') {
+    if (debugMode) {
+      const keys = Object.keys(newLocals);
+      console.log(colors.magenta(`Realx : Merging object with ${keys.length} keys`))
+      console.log(colors.yellow(keys));
+    }
     locals = merge(source, newLocals);
     return locals;
   }
@@ -61,7 +74,6 @@ for (var filename of ['config.yml', 'config.json']) {
     configPath = possiblePath
   }
 }
-
 
 // Output file, path, and temp html path
 if (!output) {
@@ -96,6 +108,7 @@ let locals = {};
 if (program.locals) {
   try {
     const stdLocals = JSON.parse(program.locals);
+    console.log(colors.magenta(`Realx : merging locals from cli`));
     locals = mergeJson(locals, stdLocals);
   } catch (e) {
     console.error(e)
@@ -106,8 +119,8 @@ if (program.input) {
   try {
     let rawData = fs.readFileSync(program.input);
     const inputLocals = JSON.parse(rawData);
+    console.log(colors.magenta(`Realx : merging locals from input`));
     locals = mergeJson(locals, inputLocals);
-    console.log(colors.magenta(`\nRealx : running releaxed in augmented mode with input from ${program.input}\n`))
   } catch (e) {
     console.error(e)
     colors.red('ReLaXed error: Could not parse file or path, see above.')
@@ -117,7 +130,7 @@ if (program.input) {
 // HTTP CODE for -u --url
 function downloadPage(url) {
   return new Promise((resolve, reject) => {
-      request(url, (error, response, body) => {
+      request.get(url, (error, response, body) => {
           if (error) reject(error);
           if (response.statusCode != 200) {
               reject('Invalid status code <' + response.statusCode + '>');
@@ -135,6 +148,7 @@ const getRemoteJson = async (url) => {
 
       // try downloading an invalid url
       const apiLocals = apiResponse;
+      console.log(colors.magenta(`Realx : merging locals from api`));
       locals = mergeJson(locals, apiLocals);
   } catch (error) {
       console.error('ERROR:');
