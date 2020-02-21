@@ -30,4 +30,6 @@ You api response must be formatted as followed :
 
 # Changelog (dd/mm/yyyy)
 
+* 12/11/2019 : add ``-d`` command to debug variables from ``locals``, ``input`` and ``url`` parameters so they can be print to console
 * 06/11/2019 : added a method to merge variables from ``locals``, ``input`` and ``url`` parameters can now be used simultaneously
+* 01/11/2019 : add ``-i``, ``-u`` commands.

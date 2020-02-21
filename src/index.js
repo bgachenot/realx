@@ -28,6 +28,7 @@ program
   .option('-u, --url <url>', 'url of json file for pug rendering')
   .option('-i, --input <path>', 'path of json file for pug rendering')
   .option('-d, --debug', 'launch debug mode, will print your input')
+  // .option('-s, --seed', 'seed Chartjs files with data')
   .option('--basedir <location>', 'Base directory for absolute paths, e.g. /')
 
   .action(function (inp, out) {
@@ -65,6 +66,18 @@ const mergeJson = (source, blob = {}) => {
     return locals;
   }
   throw new Error('Invalid json input');
+}
+
+const readFileAndMergeKeys = (filePath) => {
+  try {
+    const rawData = fs.readFileSync(filepath);
+    const inputLocals = JSON.parse(rawData);
+    console.log(colors.magenta(`Realx : merging locals from input`));
+    locals = mergeJson(locals, inputLocals);
+  } catch (e) {
+    console.error(e)
+    colors.red('ReLaXed error: Could not parse file or path, see above.')
+  }
 }
 
 var configPath
@@ -116,15 +129,16 @@ if (program.locals) {
   }
 }
 if (program.input) {
-  try {
-    let rawData = fs.readFileSync(program.input);
-    const inputLocals = JSON.parse(rawData);
-    console.log(colors.magenta(`Realx : merging locals from input`));
-    locals = mergeJson(locals, inputLocals);
-  } catch (e) {
-    console.error(e)
-    colors.red('ReLaXed error: Could not parse file or path, see above.')
+  if ((typeof program.input === typeof new Array())) {
+    const filesPathArray = program.input;
+    if (filesPathArray.length >= 0) {
+      return filesPathArray.forEach(filePathString => {
+        return readFileAndMergeKeys(filePathString);
+      })
+    }
+    return readFileAndMergeKeys(program.input);
   }
+  
 }
 
 // HTTP CODE for -u --url
