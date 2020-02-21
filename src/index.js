@@ -139,11 +139,12 @@ if (program.input) {
   const filesPathArray = program.input.split(',');
   console.log(colors.magenta(`Realx : merging input from cli`, program.input, filesPathArray.length));
   if (filesPathArray.length > 1) {
-    return filesPathArray.forEach(filePathString => {
-      return readFileAndMergeKeys(filePathString);
+    filesPathArray.forEach(filePathString => {
+      readFileAndMergeKeys(filePathString);
     })
+  } else {
+    readFileAndMergeKeys(program.input);
   }
-  return readFileAndMergeKeys(program.input);
 }
 
 // HTTP CODE for -u --url
