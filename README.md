@@ -13,7 +13,7 @@ realx -h
 The api is the same from forked software, we add two specific methods :
 
 ```
--i, --input <path>       path of json file for pug rendering
+-i, --input <path> OR path1,path2,pathN       path(s) of json variables file(s) for pug rendering
 -u, --url <url>          url of json endpoint for pug rendering
 ```
 

@@ -289,6 +289,7 @@ async function build(filepath) {
     if (program.url) {
       await getRemoteJson(program.url);
     }
+    console.log(colors.magenta('Realx : dumping locals JSON', locals));
     console.log(colors.magenta('Realx : starting build'));
     taskPromise = masterToPDF(
       inputPath,
