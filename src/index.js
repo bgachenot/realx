@@ -178,7 +178,8 @@ const getRemoteJson = async url => {
 
 // Google Chrome headless configuration
 const puppeteerConfig = {
-  headless: true,
+  executablePath: '/usr/bin/chromium',
+  headless: "new",
   args: (!program.sandbox ? ['--no-sandbox'] : []).concat([
     '--disable-translate',
     '--disable-extensions',

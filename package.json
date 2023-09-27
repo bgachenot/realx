@@ -33,9 +33,9 @@
     "markdown-it-footnote": "^3.0.2",
     "mathjax-node-page": "^3.0.1",
     "mermaid": "^8.0.0-rc.8",
-    "node-sass": "^4.9.0",
+    "node-sass": "^6.0.1",
     "pug": "^2.0.3",
-    "puppeteer": "^1.8.0"
+    "puppeteer": "^19.3.0"
   },
   "devDependencies": {
     "diff": "^3.5.0",
