@@ -235,6 +235,7 @@ async function main() {
   await build(inputPath);
 
   if (program.buildOnce) {
+    await browser.close();
     process.exit(0);
   } else {
     watch();
